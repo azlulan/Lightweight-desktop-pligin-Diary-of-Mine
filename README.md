@@ -82,7 +82,9 @@ Diary of Mine 默认离线运行，不包含遥测、云同步或 HTTP 后端。
 
 ## 许可证
 
-开源许可证尚待项目所有者选择。在 `LICENSE` 文件正式加入仓库前，本项目尚未授予复制、修改或分发许可，不应将当前公开可见性误解为已经完成开源授权。
+本项目采用 [GNU General Public License v3.0](LICENSE)（GPL-3.0）授权。
+
+Copyright (C) 2026 Haotian YU
 
 ## 更新与修改标准
 
