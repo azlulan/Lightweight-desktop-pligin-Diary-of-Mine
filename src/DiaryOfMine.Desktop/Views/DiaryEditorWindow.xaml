@@ -1,0 +1,108 @@
+<Window x:Class="DiaryOfMine.Desktop.Views.DiaryEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="日记"
+        Icon="../Assets/DiaryOfMine.ico"
+        Width="980" Height="820" MinWidth="720" MinHeight="580"
+        WindowStartupLocation="CenterOwner"
+        Background="#F6F5F0" FontFamily="Microsoft YaHei UI"
+        PreviewKeyDown="OnPreviewKeyDown" Closing="OnClosing">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="34" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="Background" Value="#FAFAF7" />
+            <Setter Property="Foreground" Value="#34423B" />
+            <Setter Property="BorderBrush" Value="#D4D9D3" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Shell" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Shell" Property="Opacity" Value="0.84" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Shell" Property="Opacity" Value="0.68" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="62" />
+            <RowDefinition Height="66" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="38" />
+        </Grid.RowDefinitions>
+
+        <Border Background="#F1F2ED" BorderBrush="#DCE1DB" BorderThickness="0,0,0,1">
+            <Grid Margin="22,0">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock x:Name="DateHeading" FontSize="16" FontWeight="SemiBold" />
+                    <TextBlock Text="一日一页 · 记录生活" Margin="0,3,0,0"
+                               FontSize="10.5" Foreground="#7B857E" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                    <Button Content="当日日程" Click="OnOpenDayDetailClick" Margin="0,0,6,0"
+                            ToolTip="保存日记并打开这一天的详细日程表" />
+                    <Button Content="复制" Command="ApplicationCommands.Copy"
+                            CommandTarget="{Binding ElementName=BodyEditor}" Margin="0,0,6,0" />
+                    <Button Content="粘贴" Command="ApplicationCommands.Paste"
+                            CommandTarget="{Binding ElementName=BodyEditor}" Margin="0,0,6,0" />
+                    <Button Content="插入图片" Click="OnInsertImageClick" Margin="0,0,14,0" />
+                    <Button x:Name="DeleteButton" Content="删除整篇" Click="OnDeleteClick"
+                            Margin="0,0,14,0" Background="#F9ECEC" Foreground="#9A4E4E"
+                            BorderBrush="#E8CACA" />
+                    <Button Content="保存" Click="OnSaveClick" Margin="0,0,6,0"
+                            Background="#E8F0EB" BorderBrush="#C6D7CD" />
+                    <Button Content="保存并退出" Click="OnSaveAndExitClick"
+                            Background="#d7ffee" Foreground="White" BorderBrush="#3D6B57" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Margin="54,14,54,5" Background="#FFFEFA"
+                BorderBrush="#DEDACE" BorderThickness="1" CornerRadius="11">
+            <TextBox x:Name="TitleTextBox" MaxLength="120" FontSize="23"
+                     FontWeight="SemiBold" Background="Transparent" BorderThickness="0"
+                     Padding="9,5" VerticalContentAlignment="Center"
+                     ToolTip="日记标题（必填）" />
+        </Border>
+
+        <Border Grid.Row="2" Margin="54,8,54,14" Background="#FFFEFA"
+                BorderBrush="#DEDACE" BorderThickness="1" CornerRadius="13">
+            <RichTextBox x:Name="BodyEditor" BorderThickness="0" Background="Transparent"
+                         Padding="30,26" FontSize="15" Foreground="#353A36"
+                         AcceptsTab="True" VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Disabled"
+                         SpellCheck.IsEnabled="True" SelectionBrush="#BDD6C9">
+                <FlowDocument PagePadding="0" LineHeight="27" ColumnWidth="100000">
+                    <Paragraph />
+                </FlowDocument>
+            </RichTextBox>
+        </Border>
+
+        <Border Grid.Row="3" Background="#F1F2ED" BorderBrush="#DCE1DB"
+                BorderThickness="0,1,0,0">
+            <Grid Margin="22,0">
+                <TextBlock Text=" Ctrl+S 快速保存 · Esc 自动保存并退出"
+                           VerticalAlignment="Center" FontSize="10" Foreground="#7B857E" />
+                <TextBlock x:Name="StatusText" HorizontalAlignment="Right"
+                           VerticalAlignment="Center" FontSize="10.5" Foreground="#64746A" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,217 @@
+<Window x:Class="DiaryOfMine.Desktop.Views.KeyTaskEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="添加Task"
+        Icon="../Assets/DiaryOfMine.ico"
+        Width="700" Height="780"
+        MinWidth="600" MinHeight="680"
+        WindowStartupLocation="CenterScreen"
+        Background="#FAFBF9"
+        FontFamily="Microsoft YaHei UI"
+        Loaded="OnLoaded" PreviewKeyDown="OnPreviewKeyDown">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="BorderBrush" Value="#CDD6D0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="MinWidth" Value="72" />
+            <Setter Property="IsEditable" Value="True" />
+            <Setter Property="IsTextSearchEnabled" Value="False" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style x:Key="InputShellStyle" TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#CDD6D0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#F7F9F7" />
+            <Setter Property="Foreground" Value="#2D3732" />
+            <Setter Property="BorderBrush" Value="#CDD6D0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="PresetButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Padding" Value="9,0" />
+            <Setter Property="Margin" Value="0,0,6,0" />
+            <Setter Property="FontSize" Value="11" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="58" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Background="#F2F5F2" BorderBrush="#DDE4DF" BorderThickness="0,0,0,1">
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Width="30" Height="30" CornerRadius="8" Background="#E1ECE6">
+                    <Image Source="{StaticResource TaskIcon}" Width="19" Height="19" />
+                </Border>
+                <StackPanel Grid.Column="1" Margin="11,0,0,0" VerticalAlignment="Center">
+                    <TextBlock x:Name="HeadingText" Text="添加 Task" FontSize="15" FontWeight="SemiBold" />
+                    <TextBlock x:Name="HeadingDescriptionText" Text="按日期范围和星期规则一次生成多个相同属性的 Key"
+                               FontSize="11" Foreground="#748078" Margin="0,2,0,0" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="24,19,24,22">
+                <TextBlock Text="名称" FontSize="12" Foreground="#68736C" Margin="0,0,0,7" />
+                <TextBox x:Name="TitleTextBox" MaxLength="240" />
+
+                <TextBlock Text="Key 概述（最多三个字）" FontSize="12"
+                           Foreground="#68736C" Margin="0,14,0,7" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="SummaryTextBox" />
+                    <Button Grid.Column="1" Content="取名称前三字" Width="106" Height="40"
+                            Margin="8,0,0,0" Click="OnCopyTitleToSummaryClick" />
+                </Grid>
+
+                <Border Margin="0,17,0,0" Padding="14" BorderBrush="#DDE4DF"
+                        BorderThickness="1" CornerRadius="9" Background="#F7F9F7">
+                    <StackPanel>
+                        <TextBlock Text="排布日期范围（可跨月、跨年）" FontWeight="SemiBold" />
+                        <Grid Margin="0,11,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource InputShellStyle}">
+                                <DatePicker x:Name="RangeStartDatePicker"
+                                            SelectedDateChanged="OnScheduleInputChanged" />
+                            </Border>
+                            <TextBlock Grid.Column="1" Text="至" Margin="10,0"
+                                       VerticalAlignment="Center" Foreground="#68736C" />
+                            <Border Grid.Column="2" Style="{StaticResource InputShellStyle}">
+                                <DatePicker x:Name="RangeEndDatePicker"
+                                            SelectedDateChanged="OnScheduleInputChanged" />
+                            </Border>
+                        </Grid>
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <Button Content="未来 1 个月" Style="{StaticResource PresetButtonStyle}"
+                                    Click="OnOneMonthClick" />
+                            <Button Content="未来 3 个月" Style="{StaticResource PresetButtonStyle}"
+                                    Click="OnThreeMonthsClick" />
+                            <Button Content="未来 1 年" Style="{StaticResource PresetButtonStyle}"
+                                    Click="OnOneYearClick" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,13,0,0" Padding="14" BorderBrush="#DDE4DF"
+                        BorderThickness="1" CornerRadius="9" Background="#F7F9F7">
+                    <StackPanel>
+                        <Grid>
+                            <TextBlock Text="每周重复日期" FontWeight="SemiBold" />
+                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                <Button Content="工作日" Style="{StaticResource PresetButtonStyle}"
+                                        Click="OnWeekdaysClick" />
+                                <Button Content="每天" Style="{StaticResource PresetButtonStyle}"
+                                        Click="OnEveryDayClick" />
+                                <Button Content="清空" Style="{StaticResource PresetButtonStyle}"
+                                        Margin="0" Click="OnClearDaysClick" />
+                            </StackPanel>
+                        </Grid>
+                        <UniformGrid Columns="7" Margin="0,13,0,0">
+                            <CheckBox x:Name="MondayCheckBox" Content="周一" HorizontalAlignment="Center"
+                                      Checked="OnScheduleInputChanged" Unchecked="OnScheduleInputChanged" />
+                            <CheckBox x:Name="TuesdayCheckBox" Content="周二" HorizontalAlignment="Center"
+                                      Checked="OnScheduleInputChanged" Unchecked="OnScheduleInputChanged" />
+                            <CheckBox x:Name="WednesdayCheckBox" Content="周三" HorizontalAlignment="Center"
+                                      Checked="OnScheduleInputChanged" Unchecked="OnScheduleInputChanged" />
+                            <CheckBox x:Name="ThursdayCheckBox" Content="周四" HorizontalAlignment="Center"
+                                      Checked="OnScheduleInputChanged" Unchecked="OnScheduleInputChanged" />
+                            <CheckBox x:Name="FridayCheckBox" Content="周五" HorizontalAlignment="Center"
+                                      Checked="OnScheduleInputChanged" Unchecked="OnScheduleInputChanged" />
+                            <CheckBox x:Name="SaturdayCheckBox" Content="周六" HorizontalAlignment="Center"
+                                      Checked="OnScheduleInputChanged" Unchecked="OnScheduleInputChanged" />
+                            <CheckBox x:Name="SundayCheckBox" Content="周日" HorizontalAlignment="Center"
+                                      Checked="OnScheduleInputChanged" Unchecked="OnScheduleInputChanged" />
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,13,0,0" Padding="14" BorderBrush="#DDE4DF"
+                        BorderThickness="1" CornerRadius="9" Background="#F7F9F7">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="开始时间" FontWeight="SemiBold" Margin="0,0,0,8" />
+                            <StackPanel Orientation="Horizontal">
+                                <Border Style="{StaticResource InputShellStyle}">
+                                    <ComboBox x:Name="StartHourComboBox" />
+                                </Border>
+                                <TextBlock Text=":" Margin="7,0" VerticalAlignment="Center" />
+                                <Border Style="{StaticResource InputShellStyle}">
+                                    <ComboBox x:Name="StartMinuteComboBox" />
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                            <TextBlock Text="结束时间" FontWeight="SemiBold" Margin="0,0,0,8" />
+                            <StackPanel Orientation="Horizontal">
+                                <Border Style="{StaticResource InputShellStyle}">
+                                    <ComboBox x:Name="EndHourComboBox" />
+                                </Border>
+                                <TextBlock Text=":" Margin="7,0" VerticalAlignment="Center" />
+                                <Border Style="{StaticResource InputShellStyle}">
+                                    <ComboBox x:Name="EndMinuteComboBox" />
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border Margin="0,14,0,0" Padding="12,9" CornerRadius="8"
+                        Background="#EEF5F1" BorderBrush="#D3E2DA" BorderThickness="1">
+                    <TextBlock x:Name="PreviewText" Foreground="#4E695C" />
+                </Border>
+                <TextBlock x:Name="ValidationText" Margin="0,10,0,0"
+                           Foreground="#B44343" FontSize="11" Visibility="Collapsed" />
+
+                <Border Margin="0,17,0,0" BorderBrush="#E2E7E3"
+                        BorderThickness="0,1,0,0" Padding="0,16,0,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="取消" Width="76" Height="36" Margin="0,0,8,0"
+                                Click="OnCancelClick" />
+                        <Button x:Name="ConfirmButton" Content="批量添加 Key" Width="142" Height="36"
+                                Click="OnConfirmClick" IsDefault="True" Background="#3D6B57"
+                                Foreground="White" BorderBrush="#3D6B57" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

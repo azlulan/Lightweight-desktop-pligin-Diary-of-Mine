@@ -1,0 +1,164 @@
+<UserControl x:Class="DiaryOfMine.Desktop.Views.HomePageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Loaded="OnLoaded"
+             Unloaded="OnUnloaded">
+    <UserControl.Resources>
+        <Style x:Key="CalendarToolbarButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="34" />
+            <Setter Property="MinWidth" Value="34" />
+            <Setter Property="Margin" Value="2,0" />
+            <Setter Property="Padding" Value="9,0" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#DDE3DF" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="QuickCalendarButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="38" />
+            <Setter Property="Height" Value="38" />
+            <Setter Property="Margin" Value="0,4" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#D9E0DB" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="ToolTipService.InitialShowDelay" Value="180" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E3ECE7" />
+                    <Setter Property="BorderBrush" Value="#9EB6AA" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.36" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#FAFAF8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="54" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Margin="18,14,16,18">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="22" />
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="≪" ToolTip="上一年" Style="{StaticResource CalendarToolbarButtonStyle}"
+                            Click="OnPreviousYearClick" />
+                    <Button Content="‹" ToolTip="上个月" Style="{StaticResource CalendarToolbarButtonStyle}"
+                            Click="OnPreviousMonthClick" />
+                </StackPanel>
+                <TextBlock Grid.Column="1" Text="{Binding MonthTitle}" VerticalAlignment="Center"
+                           FontSize="18" FontWeight="SemiBold" />
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Content="转到今天" Style="{StaticResource CalendarToolbarButtonStyle}" Click="OnTodayClick" />
+                    <Button Content="›" ToolTip="下个月" Style="{StaticResource CalendarToolbarButtonStyle}"
+                            Click="OnNextMonthClick" />
+                    <Button Content="≫" ToolTip="下一年" Style="{StaticResource CalendarToolbarButtonStyle}"
+                            Click="OnNextYearClick" />
+                </StackPanel>
+            </Grid>
+
+            <Grid x:Name="CalendarGrid" Grid.Row="1" Background="#DDE3DF"
+                  MouseMove="OnCalendarMouseMove"
+                  PreviewMouseWheel="OnCalendarMouseWheel"
+                  PreviewMouseLeftButtonUp="OnCalendarMouseLeftButtonUp"
+                  MouseLeave="OnCalendarMouseLeave" />
+
+            <Grid Grid.Row="2">
+                <TextBlock Text="{Binding StatusMessage}" Foreground="#748078" FontSize="11"
+                           VerticalAlignment="Bottom" />
+                <TextBlock x:Name="LaneScrollHint" Text="Shift + 左键切换完成状态 · Shift + 滚轮查看隐藏项目·单击日程表查看被隐藏的内容" Foreground="#8A958E"
+                           HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="10"
+                           Visibility="Collapsed" />
+            </Grid>
+        </Grid>
+
+        <Border Grid.Column="1" Background="#F2F4F1" BorderBrush="#DDE3DF" BorderThickness="1,0,0,0">
+            <Grid Margin="0,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Button ToolTip="Class·添加持续数日的进程" Style="{StaticResource QuickCalendarButtonStyle}" Click="OnAddClassClick">
+                    <Image Source="{StaticResource ClassIcon}" Width="20" Height="20" />
+                </Button>
+                <Button Grid.Row="1" ToolTip="Key·添加本日进程" Style="{StaticResource QuickCalendarButtonStyle}" Click="OnAddKeyClick" Cursor="Hand">
+                    <Image Source="{StaticResource KeyIcon}" Width="20" Height="20" />
+                </Button>
+                <Button Grid.Row="2" ToolTip="Idea·添加你的灵感" Style="{StaticResource QuickCalendarButtonStyle}" Click="OnAddIdeaClick">
+                    <Image Source="{StaticResource IdeaIcon}" Width="20" Height="20" />
+                </Button>
+                <Button Grid.Row="3" ToolTip="Task · 批量添加 Key" Style="{StaticResource QuickCalendarButtonStyle}" Click="OnAddTaskClick">
+                    <Image Source="{StaticResource TaskIcon}" Width="20" Height="20" />
+                </Button>
+                <StackPanel Grid.Row="4" Margin="0,10,0,0">
+                    <Border BorderBrush="#D9E0DB" BorderThickness="0,1,0,0" Margin="6,0,6,6" />
+                    <Button ToolTip="撤回上一步" Style="{StaticResource QuickCalendarButtonStyle}"
+                            IsEnabled="{Binding CanUndo}" Click="OnUndoClick">
+                        <Image Source="{StaticResource UndoIcon}" Width="20" Height="20" />
+                    </Button>
+                    <Button ToolTip="回滚上一步撤回" Style="{StaticResource QuickCalendarButtonStyle}"
+                            IsEnabled="{Binding CanRedo}" Click="OnRedoClick">
+                        <Image Source="{StaticResource RedoIcon}" Width="20" Height="20" />
+                    </Button>
+                </StackPanel>
+                <Ellipse Grid.Row="5" Width="7" Height="7" Fill="{StaticResource AccentBrush}"
+                         HorizontalAlignment="Center" Margin="0,0,0,8" ToolTip="快捷录入工具栏已启用" />
+            </Grid>
+        </Border>
+
+        <Popup x:Name="IdeaPopup" AllowsTransparency="True" StaysOpen="True"
+               Placement="Right" HorizontalOffset="-1">
+            <Border x:Name="IdeaPopupRoot" Width="360" MaxHeight="300" Padding="12" Background="White"
+                    BorderBrush="#CAD4CE" BorderThickness="1" CornerRadius="10"
+                    MouseEnter="OnIdeaPopupMouseEnter" MouseLeave="OnIdeaPopupMouseLeave">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.18" Color="#28362F" />
+                </Border.Effect>
+                <StackPanel>
+                    <Grid Margin="2,0,2,9">
+                        <TextBlock x:Name="IdeaPopupHeading" FontSize="12" FontWeight="SemiBold" />
+                        <TextBlock x:Name="IdeaPopupCount" HorizontalAlignment="Right" FontSize="11"
+                                   Foreground="#748078" />
+                    </Grid>
+                    <ScrollViewer MaxHeight="240" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <WrapPanel x:Name="IdeaPanel" />
+                    </ScrollViewer>
+                </StackPanel>
+            </Border>
+        </Popup>
+
+        <Border x:Name="DragStatus" Grid.ColumnSpan="2" HorizontalAlignment="Center"
+                VerticalAlignment="Bottom" Margin="0,0,0,36" Padding="13,8"
+                Background="White" BorderBrush="#CAD4CE" BorderThickness="1"
+                CornerRadius="8" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="DragStatusLabel" Text="Class 日期与时间：" Foreground="#748078" />
+                <TextBlock x:Name="DragStatusText" FontWeight="SemiBold" />
+                <TextBlock x:Name="DragStatusHint" Text=" · 格内从左至右 00:00—23:30 · 松开鼠标保存" Foreground="#748078" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

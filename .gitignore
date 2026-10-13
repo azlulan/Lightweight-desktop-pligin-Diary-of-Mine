@@ -1,0 +1,22 @@
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+artifacts/
+.tmp_doc_review/
+**/publish/
+TestResults/
+*.log
+coverage.*
+# 私人内容、数据库、密钥与备份不进入源码仓库。
+data/
+backups/
+logs/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.key
+*.vault
+*.dmp

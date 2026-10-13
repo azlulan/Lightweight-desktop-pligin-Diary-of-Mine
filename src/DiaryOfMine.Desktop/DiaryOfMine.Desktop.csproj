@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>DiaryOfMine</AssemblyName>
+    <AssemblyTitle>Diary of Mine</AssemblyTitle>
+    <Product>Diary of Mine</Product>
+    <Company>Diary of Mine</Company>
+    <Description>Windows 本地日记与日程工具</Description>
+    <Version>1.1.1</Version>
+    <ApplicationIcon>Assets\DiaryOfMine.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DiaryOfMine.Application\DiaryOfMine.Application.csproj" />
+    <ProjectReference Include="..\DiaryOfMine.Infrastructure\DiaryOfMine.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\DiaryOfMine.ico" />
+    <Resource Include="Assets\DiaryOfMine.jpg" />
+    <Resource Include="Assets\DiaryOfMine.png" />
+  </ItemGroup>
+</Project>

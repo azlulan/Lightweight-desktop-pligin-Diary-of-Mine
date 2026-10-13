@@ -1,0 +1,35 @@
+name: 功能建议
+description: 提议新的功能或交互改进
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 使用场景
+      description: 说明当前遇到的问题，不要包含真实日记或个人信息
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议方案
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: 数据与兼容性影响
+      description: 是否涉及现有 JSON、设置、安装器、快捷键或窗口行为
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 备选方案
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: 范围确认
+      options:
+        - label: 我已确认建议不依赖上传真实用户数据
+          required: true

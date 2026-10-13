@@ -1,0 +1,118 @@
+<Window x:Class="DiaryOfMine.Desktop.Views.ReminderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Diary of Mine — 日程提醒"
+        Icon="../Assets/DiaryOfMine.ico"
+        Width="410"
+        SizeToContent="Height"
+        MaxHeight="620"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        Topmost="True"
+        Background="Transparent"
+        AllowsTransparency="True"
+        Closing="OnClosing">
+        <Border Background="#FFFDFC"
+            BorderBrush="#D9BBB6"
+            BorderThickness="1"
+            CornerRadius="16"
+            Padding="0">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="24" ShadowDepth="4" Opacity="0.24" Color="#40302D" />
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border Background="#02DF82" CornerRadius="15,15,0,0" Padding="18,14">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="日程起始"
+                                   Foreground="White"
+                                   FontSize="21"
+                                   FontWeight="Bold" />
+                        <TextBlock x:Name="PlacementText"
+                                   Text="请单击按钮进行确认"
+                                   Margin="0,3,0,0"
+                                   Foreground="#FFF0ED"
+                                   FontSize="12" />
+                        <TextBlock x:Name="StatusText"
+                                   Visibility="Collapsed"
+                                   Margin="0,3,0,0"
+                                   Foreground="#FFF0ED"
+                                   FontSize="12" />
+                    </StackPanel>
+                    <Border Grid.Column="1" Background="#35FFFFFF" CornerRadius="14"
+                            Padding="10,5" VerticalAlignment="Center">
+                        <TextBlock x:Name="CountText" Text="0 项"
+                                   Foreground="White" FontWeight="SemiBold" />
+                    </Border>
+                </Grid>
+            </Border>
+
+            <ScrollViewer Grid.Row="1"
+                          MaxHeight="455"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl x:Name="ReminderItems" Margin="14,10,14,4">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,5"
+                                    Padding="15,13"
+                                    Background="{Binding CardBackground}"
+                                    BorderBrush="{Binding CardBorder}"
+                                    BorderThickness="1"
+                                    CornerRadius="12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding KindText}"
+                                                   Foreground="{Binding AccentColor}"
+                                                   FontSize="11"
+                                                   FontWeight="Bold" />
+                                        <TextBlock Text="{Binding Title}"
+                                                   Margin="0,5,0,0"
+                                                   FontSize="17"
+                                                   FontWeight="SemiBold"
+                                                   TextWrapping="Wrap" />
+                                        <TextBlock Text="{Binding TimeText}"
+                                                   Margin="0,5,0,0"
+                                                   Foreground="#59635D"
+                                                   FontSize="13" />
+                                    </StackPanel>
+                                    <Button Grid.Column="1"
+                                            Content="{Binding ConfirmationText}"
+                                            IsEnabled="{Binding CanConfirm}"
+                                            Tag="{Binding}"
+                                            Click="OnConfirmationClick"
+                                            MinWidth="88"
+                                            Height="46"
+                                            Margin="18,0,0,0"
+                                            Padding="16,0"
+                                            VerticalAlignment="Center"
+                                            Background="#4F7A68"
+                                            Foreground="White"
+                                            BorderThickness="0"
+                                            FontSize="14"
+                                            FontWeight="SemiBold"
+                                            ToolTip="仅确认本次提醒，不修改原日程" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Window>

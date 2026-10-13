@@ -1,0 +1,257 @@
+<Window x:Class="DiaryOfMine.Desktop.Views.CalendarItemEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="添加Class"
+        Icon="../Assets/DiaryOfMine.ico"
+        Width="900" Height="720"
+        MinWidth="800" MinHeight="620"
+        ResizeMode="CanMinimize"
+        ShowInTaskbar="True"
+        WindowStartupLocation="CenterScreen"
+        Background="#FAFBF9"
+        FontFamily="Microsoft YaHei UI"
+        Loaded="OnLoaded" PreviewKeyDown="OnPreviewKeyDown">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="BorderBrush" Value="#CDD6D0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="InputBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="InputBorder" Property="BorderBrush" Value="#91AA9E" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="MinWidth" Value="72" />
+            <Setter Property="IsEditable" Value="True" />
+            <Setter Property="IsTextSearchEnabled" Value="False" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style x:Key="RoundedInputShellStyle" TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#CDD6D0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#F7F9F7" />
+            <Setter Property="Foreground" Value="#2D3732" />
+            <Setter Property="BorderBrush" Value="#CDD6D0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="9">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.86" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.72" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="54" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Background="#F2F5F2" BorderBrush="#DDE4DF" BorderThickness="0,0,0,1">
+            <Grid Margin="18,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border x:Name="KindBadge" Width="28" Height="28" CornerRadius="8" Background="#E1ECE6">
+                    <Image x:Name="KindIcon" Width="17" Height="17"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                    <TextBlock x:Name="HeadingText" FontSize="15" FontWeight="SemiBold" />
+                    <TextBlock x:Name="SubtitleText" FontSize="11" Foreground="#748078" Margin="0,2,0,0" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid x:Name="EditorBodyGrid" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.18*" />
+                <ColumnDefinition Width="0.82*" />
+            </Grid.ColumnDefinitions>
+
+            <ScrollViewer x:Name="EditorFormScrollViewer"
+                          VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="22,18,14,20">
+                <TextBlock Text="名称 / 内容" FontSize="12" Foreground="#68736C" Margin="0,0,0,7" />
+                <TextBox x:Name="TitleTextBox" MaxLength="240" TextChanged="TitleTextBox_TextChanged" />
+
+                <StackPanel x:Name="KeySummaryPanel" Margin="0,14,0,0" Visibility="Collapsed">
+                    <TextBlock Text="概述（最多三个字）" FontSize="12" Foreground="#68736C" Margin="0,0,0,7" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="SummaryTextBox" />
+                        <Button Grid.Column="1" Content="取名称前三字" Width="106" Height="40"
+                                Margin="8,0,0,0" Click="OnCopyTitleToSummaryClick"
+                                ToolTip="将上方名称的前三个字填入概述" />
+                    </Grid>
+                </StackPanel>
+
+                <Grid x:Name="StartGroup" Margin="0,16,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.45*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="开始日期" FontSize="12" Foreground="#68736C" Margin="0,0,0,7" />
+                        <Border Style="{StaticResource RoundedInputShellStyle}">
+                            <DatePicker x:Name="StartDatePicker" SelectedDateFormat="Long" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel x:Name="StartTimePanel" Grid.Column="1" Margin="12,0,0,0">
+                        <TextBlock Text="开始时间（24小时）" FontSize="12" Foreground="#68736C" Margin="0,0,0,7" />
+                        <StackPanel Orientation="Horizontal">
+                            <Border Style="{StaticResource RoundedInputShellStyle}">
+                                <ComboBox x:Name="StartHourComboBox" />
+                            </Border>
+                            <TextBlock Text=":" Margin="6,0" VerticalAlignment="Center" />
+                            <Border Style="{StaticResource RoundedInputShellStyle}">
+                                <ComboBox x:Name="StartMinuteComboBox" Width="44" />
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+                <Border x:Name="EndGroup" Margin="0,17,0,0" Padding="13"
+                        BorderBrush="#DDE4DF" BorderThickness="1" CornerRadius="9" Background="#F7F9F7">
+                    <StackPanel>
+                        <CheckBox x:Name="HasEndCheckBox" Content="设置结束日期"
+                                  Checked="OnHasEndChanged" Unchecked="OnHasEndChanged" />
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.45*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="结束日期" FontSize="12" Foreground="#68736C" Margin="0,0,0,7" />
+                                <Border Style="{StaticResource RoundedInputShellStyle}">
+                                    <DatePicker x:Name="EndDatePicker" SelectedDateFormat="Long" />
+                                </Border>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                <TextBlock Text="结束时间" FontSize="12" Foreground="#68736C" Margin="0,0,0,7" />
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Style="{StaticResource RoundedInputShellStyle}">
+                                        <ComboBox x:Name="EndHourComboBox" />
+                                    </Border>
+                                    <TextBlock Text=":" Margin="6,0" VerticalAlignment="Center" />
+                                    <Border Style="{StaticResource RoundedInputShellStyle}">
+                                        <ComboBox x:Name="EndMinuteComboBox" />
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock x:Name="OpenEndedHint" Text="不勾选“结束日期”时，该项目视作长期进行。"
+                                   Margin="0,9,0,0" FontSize="11" Foreground="#748078" />
+                    </StackPanel>
+                </Border>
+
+                <CheckBox x:Name="CompletedCheckBox" Content="已经完成"
+                          Margin="0,17,0,0" Visibility="Collapsed" />
+
+                <TextBlock x:Name="ValidationText" Margin="0,12,0,0"
+                           Foreground="#B44343" FontSize="11" Visibility="Collapsed" />
+
+                <Border Margin="0,18,0,0" BorderBrush="#E2E7E3" BorderThickness="0,1,0,0" Padding="0,16,0,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="取消" Width="76" Height="36" Margin="0,0,8,0" Click="OnCancelClick" />
+                        <Button Content="添加到日程表" Width="128" Height="36" Click="OnConfirmClick"
+                                IsDefault="True" Background="#3D6B57" Foreground="White" BorderBrush="#3D6B57" />
+                    </StackPanel>
+                </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Grid x:Name="FileLinksPanel" Grid.Column="1" Margin="10,18,22,20"
+                  AllowDrop="True" DragOver="OnFileLinksDragOver" Drop="OnFileLinksDrop">
+                <Rectangle RadiusX="13" RadiusY="13" Fill="#FBFCFA"
+                           Stroke="#AEBEB5" StrokeThickness="1.2" StrokeDashArray="5 4" />
+                <Grid Margin="18,16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="拖拽文件将快速链接绑定至日程"
+                               FontSize="14" FontWeight="SemiBold" Foreground="#34423B"
+                               TextWrapping="Wrap" />
+                    <TextBlock Grid.Row="1" Margin="0,6,0,12"
+                               Text="仅保存地址，不复制内容。支持一次拖入多个本地文件或文件夹。"
+                               FontSize="10.5" Foreground="#748078" TextWrapping="Wrap" />
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="FileLinksList" />
+                    </ScrollViewer>
+                    <TextBlock x:Name="FileLinksStatusText" Grid.Row="3" Margin="0,9,0,0"
+                               FontSize="10.5" Foreground="#956C44" TextWrapping="Wrap"
+                               Visibility="Collapsed" />
+                    <Grid Grid.Row="4" Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button Content="+ 添加文件" Height="36" Margin="0,0,5,0"
+                                Click="OnAddFilesClick" />
+                        <Button Grid.Column="1" Content="+ 添加文件夹" Height="36" Margin="5,0,0,0"
+                                Click="OnAddFoldersClick" />
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

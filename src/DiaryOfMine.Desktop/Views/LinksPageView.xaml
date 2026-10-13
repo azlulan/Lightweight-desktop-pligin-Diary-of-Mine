@@ -1,0 +1,168 @@
+<UserControl x:Class="DiaryOfMine.Desktop.Views.LinksPageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Loaded="OnLoaded" Unloaded="OnUnloaded">
+    <UserControl.Resources>
+        <Style x:Key="PaperButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Shell" Background="Transparent">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Shell" Property="Opacity" Value="0.83" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Shell" Property="Opacity" Value="0.68" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SoftButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="38" />
+            <Setter Property="Padding" Value="15,0" />
+            <Setter Property="Background" Value="#EEF3EF" />
+            <Setter Property="Foreground" Value="#365044" />
+            <Setter Property="BorderBrush" Value="#D2DED6" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Shell" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="11" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Shell" Property="Opacity" Value="0.86" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Shell" Property="Opacity" Value="0.72" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#FAFAF8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="88" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Background="#F5F7F4" BorderBrush="#DFE4DF" BorderThickness="0,0,0,1">
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="125" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="日记" FontSize="21" FontWeight="SemiBold" />
+                    <TextBlock Text="— · — · — · — · —" Margin="0,4,0,0"
+                               FontSize="11.5" Foreground="{StaticResource MutedTextBrush}" />
+                    <TextBlock Text="记录和翻阅文字与图片" Margin="0,4,0,0"
+                               FontSize="11.5" Foreground="{StaticResource MutedTextBrush}" />
+                </StackPanel>
+
+                <Border Grid.Column="1" Height="40" MinWidth="185" MaxWidth="430" Margin="10,0"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                        Background="#FCFDFB" BorderBrush="#D7DFD9" BorderThickness="1"
+                        CornerRadius="13" Padding="12,0,7,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="⌕" FontSize="20" Foreground="#7A887F"
+                                   VerticalAlignment="Center" Margin="0,-2,8,0" />
+                        <TextBox Grid.Column="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 BorderThickness="0" Background="Transparent" Padding="0"
+                                 VerticalContentAlignment="Center" FontSize="12.5"
+                                 ToolTip="搜索标题、正文关键词或日期数字" />
+                        <Button Grid.Column="2" Content="×" Width="27" Height="27" Padding="0"
+                                Style="{StaticResource SoftButtonStyle}" Click="OnClearSearchClick"
+                                ToolTip="清除搜索" />
+                    </Grid>
+                </Border>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center"
+                               Width="100" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                               Margin="0,0,9,0" Foreground="{StaticResource MutedTextBrush}" />
+                    <Button Content="+日记" Style="{StaticResource SoftButtonStyle}"
+                            Padding="12,0" Click="OnOpenTodayClick"
+                            Background="{StaticResource AccentBrush}" Foreground="White"
+                            BorderBrush="{StaticResource AccentBrush}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl ItemsSource="{Binding Entries}" Margin="21,19,12,24">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource PaperButtonStyle}" Tag="{Binding Date}"
+                                    Click="OnDiaryCardClick" Margin="7,7,12,16">
+                                <StackPanel Width="205">
+                                    <TextBlock Text="{Binding DateHeading}" FontSize="11.5"
+                                               FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                               TextWrapping="NoWrap" Margin="3,0,3,8" />
+                                    <Border Height="252" Background="#FFFEF9" BorderBrush="#E0DBCE"
+                                            BorderThickness="1" CornerRadius="11" Padding="18,20,18,14">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="#927F68" BlurRadius="9"
+                                                              ShadowDepth="2" Opacity="0.13" />
+                                        </Border.Effect>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="{Binding PreviewText}" FontSize="12"
+                                                       LineHeight="23" TextWrapping="Wrap"
+                                                       TextTrimming="CharacterEllipsis" Foreground="#4B504C" />
+                                            <TextBlock Grid.Row="1" Text="{Binding UpdatedText}"
+                                                       HorizontalAlignment="Right" FontSize="9.5"
+                                                       Foreground="#999B92" Margin="0,8,0,0" />
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="{Binding EmptyStateTitle}" FontSize="18" FontWeight="SemiBold"
+                           HorizontalAlignment="Center" />
+                <TextBlock Text="{Binding EmptyStateDescription}"
+                           Margin="0,8,0,0" Foreground="{StaticResource MutedTextBrush}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
