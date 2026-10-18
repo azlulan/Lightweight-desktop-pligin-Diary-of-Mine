@@ -1,8 +1,9 @@
 # Diary of Mine · 个人日记本
 
-Diary of Mine 是一款 Windows 本地日程、日记与工作计时工具。当前桌面端已经包含月历日程、单日分钟级时间轴、批量 Task、便签与灵感、图文日记、工作模式、提醒、悬浮窗、设置及 Windows 本机注册；应用为单进程 WPF 程序，不依赖 HTTP 后端。
+##欢迎来到我的第一个项目！
 
-> 当前状态：v1.1.1 发布物已生成，仍待项目所有者完成最终运行验收。仓库目前以源码和开发资料为主；正式公开发布前还需确定开源许可证并确认图片、图标及公开联系方式的授权范围。
+
+Diary of Mine 是一款离线、轻量的Windows 本地日程、日记与工作计时工具。当前桌面端已经包含月历日程、单日分钟级时间轴、批量 Task、便签与灵感、图文日记、工作模式、提醒、悬浮窗、设置及 Windows 本机注册；应用为单进程 WPF 程序，不依赖 HTTP 后端。
 
 ## 当前功能
 
@@ -12,35 +13,6 @@ Diary of Mine 是一款 Windows 本地日程、日记与工作计时工具。当
 - 日记：按日期排列与关键词/数字搜索，正文支持富文本式换行、复制粘贴与块级图片；手动保存、退出及 Esc 均会尝试保存。
 - 工作模式：目标管理、分钟级录制、跨午夜（最长 24 小时）、中断覆盖、日期切换、今日/累计统计与名称/时长排序。
 - Windows 交互：托盘、悬浮窗快捷面板、全局展开热键、开机自启、应用注册、提醒窗口及单实例运行。
-
-## 技术与分层
-
-| 层次 | 项目 | 职责 |
-| --- | --- | --- |
-| 领域 | `DiaryOfMine.Domain` | 日程、Task、日记、工作模式的数据模型与不变量 |
-| 应用 | `DiaryOfMine.Application` | 用例服务、仓储接口、提醒规划、色板槽位解析 |
-| 基础设施 | `DiaryOfMine.Infrastructure` | JSON 存储、旧数据迁移、设置、日志和本地路径 |
-| 桌面端 | `DiaryOfMine.Desktop` | WPF 窗口、ViewModel、绘制与拖拽、托盘和 Windows 集成 |
-
-目标框架为 .NET 9；桌面端为 `net9.0-windows`，启用 WPF、Windows Forms 与 Per-Monitor V2 DPI。项目当前没有第三方 NuGet 依赖。
-
-```text
-DiaryOfMine.sln
-src/
-  DiaryOfMine.Domain/
-  DiaryOfMine.Application/
-  DiaryOfMine.Infrastructure/
-  DiaryOfMine.Desktop/
-packaging/                    自定义安装器、卸载器源码
-tools/package_demo.ps1       Demo 发布与 IExpress 打包脚本
-docs/
-  ai/                         面向后续 AI/开发工作流的当前源码索引
-  architecture.md
-  development.md
-  logging.md
-```
-
-依赖方向为：`Desktop -> Application + Infrastructure`、`Infrastructure -> Application`、`Application -> Domain`。大量日程画布和拖拽交互位于 WPF code-behind；持久化变更仍通过 ViewModel/Application Service 进入仓储，不应在界面代码中直接改 JSON。
 
 ## 启动与调试
 
